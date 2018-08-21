@@ -17,6 +17,7 @@ gobind {
 
     GOARCH = "arm 386"
 
+    GOMOBILEFLAGS = "-classpath=/Users/haidy/Library/Android/sdk/platforms/android-28/android.jar"
     /* Absolute path to the go binary */
 //    GO = "/usr/local/go/bin/go"
 
