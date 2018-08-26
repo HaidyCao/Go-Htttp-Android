@@ -1,11 +1,14 @@
 package com.example.haidy.gohttp;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import go.http.java.GoHttpClient;
 import http.GoClient;
+import http.GoHttpTransport;
 import http.GoResponse;
+import http.GoTcpDial;
+import http.GoTcpDialCreater;
+import http.Http;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,13 +19,24 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                GoHttpClient httpClient = new GoHttpClient();
                 try {
                     GoClient client = new GoClient();
-                    client.setUrl("http://www.baidu.com");
+                    client.setUrl("https://www.baidu.com");
                     client.setMethod("GET");
-                    GoResponse response = httpClient.request(client);
+
+                    GoHttpTransport transport = new GoHttpTransport();
+                    transport.setTlsCreater(new GoTcpDialCreater() {
+                        @Override
+                        public GoTcpDial createGoDial(String s) throws Exception {
+                            GoTcpDial tcpDial = Http.getGoTcpDial(s);
+                            return Http.updateDialToSSLTcpDial(tcpDial);
+                        }
+                    });
+                    client.setTransport(transport);
+
+                    GoResponse response = Http.request(client);
                     System.out.println(response.getStatueCode());
+                    System.out.println(response.getBody().string());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
