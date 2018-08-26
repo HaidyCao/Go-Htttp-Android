@@ -6,7 +6,5 @@ import http.Http;
 
 public class GoHttpClient {
 
-    public GoResponse request(GoClient client) throws Exception {
-        return Http.request(client);
-    }
+
 }

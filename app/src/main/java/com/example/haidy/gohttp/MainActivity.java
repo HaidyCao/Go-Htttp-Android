@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import http.GoClient;
 import http.GoHttpTransport;
+import http.GoRequest;
 import http.GoResponse;
 import http.GoTcpDial;
 import http.GoTcpDialCreater;
@@ -21,8 +22,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     GoClient client = new GoClient();
-                    client.setUrl("https://www.baidu.com");
-                    client.setMethod("GET");
+                    GoRequest request = Http.newRequest("https://www.baidu.com");
 
                     GoHttpTransport transport = new GoHttpTransport();
                     transport.setTlsCreater(new GoTcpDialCreater() {
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                     client.setTransport(transport);
 
-                    GoResponse response = Http.request(client);
+                    GoResponse response = Http.request(client, request);
                     System.out.println(response.getStatueCode());
                     System.out.println(response.getBody().string());
                 } catch (Exception e) {
